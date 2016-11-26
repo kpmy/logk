@@ -1,5 +1,5 @@
 /* kpmy 07.11.2016 */
-angular.module('LogkAl', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ngMessages', 'ngSanitize'])
+angular.module('LogkAl', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ngMessages', 'ngSanitize', 'angular-raf'])
     .config(function ($mdIconProvider) {
         $mdIconProvider.iconSet('action', 'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg');
         $mdIconProvider.iconSet('alert', 'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-alert.svg');

@@ -1,6 +1,4 @@
-/**
- * Created by pk on 08.11.2016.
- */
+/* kpmy 08.11.2016 */
 angular.module('LogkAl')
     .directive('navbar', function () {
         return {

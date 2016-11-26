@@ -1,6 +1,4 @@
-/**
- * Created by pk on 07.11.2016.
- */
+/* kpmy 07.11.2016 */
 angular.module('LogkAl', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ngMessages', 'ngSanitize'])
     .config(function ($mdIconProvider) {
         $mdIconProvider.iconSet('action', 'bower_components/material-design-icons/sprites/svg-sprite/svg-sprite-action.svg');
@@ -23,8 +21,8 @@ angular.module('LogkAl', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ngMessages', 
     .config(function ($mdThemingProvider) {
         $mdThemingProvider
             .theme('default')
-            .primaryPalette('blue')
-            .accentPalette('teal')
-            .warnPalette('red')
+            .primaryPalette('light-green')
+            .accentPalette('green')
+            .warnPalette('orange')
             .backgroundPalette('grey');
     });

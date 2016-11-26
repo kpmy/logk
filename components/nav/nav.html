@@ -1,0 +1,25 @@
+<style>
+    .header {
+        cursor: pointer;
+    }
+</style>
+<script type="text/ng-template" id="nav.index.html">
+    <md-toolbar layout="row" layout-align="start center">
+        <md-button class="md-icon-button" aria-label="navi"
+                   ng-click="gotoStart()">
+            <md-icon md-svg-icon="action:ic_list_24px"></md-icon>
+        </md-button>
+        <div flex="45"><h3 ng-click="gotoStart()" class="header">ДИАЛЕКТИЧЕСКАЯ ЛОГИКА ДЛЯ МАЛЫШЕЙ</h3></div>
+        <div flex></div>
+    </md-toolbar>
+    <div layout="row" layout-align="end center">
+        <md-subheader><em>{{phrase()}}</em></md-subheader>
+    </div>
+</script>
+
+<script type="text/ng-template" id="nav.ref.html">
+
+</script>
+
+<section ng-if="!_.isObject(navi)" ng-include="'nav.index.html'"></section>
+<section ng-if="_.isObject(navi)" ng-include="'nav.ref.html'"></section>

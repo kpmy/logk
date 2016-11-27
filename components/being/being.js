@@ -1,4 +1,33 @@
 angular.module('LogkAl')
+    .run(function () {
+        CanvasRenderingContext2D.prototype.wrapText = function (text, x, y, maxWidth, lineHeight) {
+
+            var lines = text.split("\n");
+
+            for (var i = 0; i < lines.length; i++) {
+
+                var words = lines[i].split(' ');
+                var line = '';
+
+                for (var n = 0; n < words.length; n++) {
+                    var testLine = line + words[n] + ' ';
+                    var metrics = this.measureText(testLine);
+                    var testWidth = metrics.width;
+                    if (testWidth > maxWidth && n > 0) {
+                        this.fillText(line, x, y);
+                        line = words[n] + ' ';
+                        y += lineHeight;
+                    }
+                    else {
+                        line = testLine;
+                    }
+                }
+
+                this.fillText(line, x, y);
+                y += lineHeight;
+            }
+        };
+    })
     .directive('being', function (raf) {
         return {
             restrict: 'E',
@@ -7,7 +36,8 @@ angular.module('LogkAl')
                 width: '=width',
                 height: '=height',
                 padding: '=padding',
-                spacing: '=spacing'
+                spacing: '=spacing',
+                lineHeight: '=lineHeight'
             },
             templateUrl: 'components/being/being.canvas.html',
 
@@ -40,23 +70,30 @@ angular.module('LogkAl')
                     p.y = y;
                     p.dx = 0;
                     p.dy = 0;
-                    p.color = [0, 0, 0, 255]
+                    p.color = [0x32, 0x5c, 0x00, 255]
                 }
 
                 Particle.prototype.index = function (w, h, l, t) {
                     return ((l + Math.round(this.x)) + (t + Math.round(this.y)) * w) * 4;
                 };
                 Particle.prototype.randomize = function () {
-                    this.x = this.x + Math.round(100 * Math.random() - 50);
-                    this.y = this.y + Math.round(100 * Math.random() - 50);
+                    this.x = this.x + Math.round(200 * Math.random() - 100);
+                    this.y = this.y + Math.round(200 * Math.random() - 100);
                 };
 
                 function initFrame(f, w, h, l, t, r, b) {
                     ctx.clearRect(0, 0, w, h);
-                    ctx.font = "150px Impact";
-                    ctx.textAlign = 'center';
-                    ctx.fillStyle = 'rgba(222, 222, 222, 1.0)';
-                    ctx.fillText("БЫТИЕ", w / 2, h / 2);
+                    ctx.fillStyle = 'rgba(222, 222, 222, 1)';
+
+                    if (!_.isEmpty($scope.words)) {
+                        let line = $scope.lineHeight;
+                        ctx.font = `${line}px Impact`;
+                        ctx.textAlign = 'center';
+                        ctx.wrapText($scope.words, w / 2, h / 2, w - 2 * l, line);
+                    } else {
+                        ctx.fillRect(0, h / 2 - 2, w, 4);
+                    }
+
                     let image = ctx.getImageData(0, 0, w, h);
                     let bitmap = image.data;
                     f.particles = [];
@@ -101,16 +138,15 @@ angular.module('LogkAl')
                             if (r - R < 0.5) {
                                 let csc = dx / r;
                                 let sc = dy / r;
-                                px = ox - csc * (R + 0.1 + 5 * Math.random());
-                                py = oy - sc * (R + 0.1 + 5 * Math.random());
-                                if (odx > 0) p.x1 = ox - csc * (R + 0.1 + (5 + Math.abs(odx)) * Math.random());
-                                if (ody > 0) p.y1 = oy - sc * (R + 0.1 + (5 + Math.abs(ody)) * Math.random());
+                                px = ox - csc * (R + 0.1 + 3 * Math.random());
+                                py = oy - sc * (R + 0.1 + 3 * Math.random());
+                                if ((p.x1 == p.x0 || p.y1 == p.y0) && (odx != 0 || ody != 0)) {
+                                    p.x1 = ox - csc * (R + 0.1 + odx * Math.random()) / 2;
+                                    p.y1 = oy - sc * (R + 0.1 + ody * Math.random()) / 2;
+                                }
                             }
                         }
-                        //if(px + l < 0) px = -l;
-                        //if(px >= w) px = w -1;
-                        //if(py + t < 0) py = -t;
-                        //if(py >= h) py = h - 1;
+
                         if (Math.abs(px - p.x1) < 0.5) p.x1 = p.x0;
                         if (Math.abs(py - p.y1) < 0.5) p.y1 = p.y0;
                         p.x = px;
@@ -119,7 +155,7 @@ angular.module('LogkAl')
                 }
 
                 function renderFrame() {
-                    const fps = 1000 / 100;
+                    const fps = 1000 / 48;
                     var now = Date.now();
                     var delta = now - $scope.frame.last;
                     if (delta < fps) return;
@@ -174,9 +210,10 @@ angular.module('LogkAl')
 
                 bcc.on('mousemove', function (e) {
                     raf.apply(function () {
-                        var position = bcc.position();
-                        let x = e.pageX - position.left - $scope.padding;
-                        let y = e.pageY - position.top - $scope.padding;
+                        //var position = bcc.position();
+                        var offset = bcc.offset();
+                        let x = e.offsetX - $scope.padding;
+                        let y = e.offsetY - $scope.padding;
                         let now = Date.now();
                         var dt = now - $scope.frame.obstacle.last;
                         if (dt > 50) {
@@ -190,6 +227,10 @@ angular.module('LogkAl')
                         $scope.frame.obstacle.x = x;
                         $scope.frame.obstacle.y = y;
                     });
+                });
+
+                $scope.$watch('words', function () {
+                    raf.apply(initFrame0());
                 });
 
                 $scope.$watch('width', function () {

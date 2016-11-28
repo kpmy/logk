@@ -11,8 +11,19 @@
     <link rel="stylesheet" href="bower_components/angular-material-icons/angular-material-icons.css"/>
 
     <link rel="stylesheet" href="bower_components/roboto-fontface/css/roboto/roboto-fontface.css"/>
+    <link rel="stylesheet" href="components/fonts/fonts.css"/>
+    <style>
+        #preloadfont {
+            font-family: Intro;
+            opacity: 0;
+            height: 0;
+            width: 0;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body ui-view>
+<div id="preloadfont">.</div>
 <script src="bower_components/jquery/dist/jquery.js"></script>
 
 <script src="bower_components/angular/angular.js"></script>
@@ -23,14 +34,15 @@
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
-<script src="bower_components/angular-raf/angular-raf.js"></script>
 <script src="bower_components/angular-material-icons/angular-material-icons.js"></script>
 <script src="bower_components/underscore/underscore.js"></script>
 
 <script src="components/app.js"></script>
 <script src="components/nav/nav.js"></script>
-<script src="components/index/index.js"></script>
+<script src="components/ref/ref.js"></script>
+<script src="components/intro/intro.js"></script>
 <script src="components/being/being.js"></script>
+<script src="components/steps/steps.js"></script>
 <script src="components/route.js"></script>
 </body>
 </html>

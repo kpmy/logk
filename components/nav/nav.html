@@ -18,7 +18,20 @@
 </script>
 
 <script type="text/ng-template" id="nav.ref.html">
-
+    <md-toolbar layout="row" layout-align="start center">
+        <md-button class="md-icon-button" aria-label="navi"
+                   ng-click="gotoStart()">
+            <md-icon md-svg-icon="action:ic_list_24px"></md-icon>
+        </md-button>
+        <div flex="45"><h3 ng-click="gotoStart()" class="header">ДИАЛЕКТИЧЕСКАЯ ЛОГИКА ДЛЯ МАЛЫШЕЙ</h3></div>
+        <div flex></div>
+    </md-toolbar>
+    <div layout="row" layout-align="start center">
+        <md-subheader>Категории</md-subheader>
+        <md-chips>
+            <md-chip ng-repeat="step in navi.steps" ng-click="navi.gotoStep(step.id)">{{step.name}}</md-chip>
+        </md-chips>
+    </div>
 </script>
 
 <section ng-if="!_.isObject(navi)" ng-include="'nav.index.html'"></section>

@@ -1,4 +1,30 @@
 angular.module('LogkAl')
+    .factory('raf', [
+        '$rootScope', function ($rootScope) {
+            return {
+                apply: function (f) {
+                    return window.requestAnimationFrame(function () {
+                        return $rootScope.$apply(f);
+                    });
+                },
+                onRenderFrame: function (scope, cb) {
+                    var disconnect, render, requestId;
+                    requestId = void 0;
+                    render = function () {
+                        cb();
+                        return requestId = window.requestAnimationFrame(render);
+                    };
+                    disconnect = scope.$on('$destroy', function (e) {
+                        if (requestId) {
+                            window.cancelAnimationFrame(requestId);
+                        }
+                        return disconnect();
+                    });
+                    return render();
+                }
+            };
+        }
+    ])
     .run(function () {
         CanvasRenderingContext2D.prototype.wrapText = function (text, x, y, maxWidth, lineHeight) {
 
@@ -28,7 +54,7 @@ angular.module('LogkAl')
             }
         };
     })
-    .directive('being', function (raf) {
+    .directive('being', function (raf, $document) {
         return {
             restrict: 'E',
             scope: {
@@ -42,23 +68,6 @@ angular.module('LogkAl')
             templateUrl: 'components/being/being.canvas.html',
 
             link: function ($scope, elem, attrs) {
-                var bcc = angular.element(elem).find("#being-canvas-container");
-                var bc = angular.element(elem).find("#being-canvas");
-                var ctx = bc[0].getContext('2d');
-                ctx.imageSmoothingEnabled = false;
-                ctx.translate(0.5, 0.5);
-                ctx.scale(1, 1);
-
-                $scope.frame = {
-                    obstacle: {
-                        radius: 75,
-                        x: 0, y: 0,
-                        dx: 0, dy: 0,
-                        last: Date.now()
-                    },
-                    particles: [],
-                    last: 0
-                };
 
                 function Particle(x, y) {
                     const p = this;
@@ -82,14 +91,21 @@ angular.module('LogkAl')
                 };
 
                 function initFrame(f, w, h, l, t, r, b) {
+                    if (_.isUndefined(window.ctx_get)) return;
+                    let ctx = window.ctx_get();
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.translate(0.5, 0.5);
+                    ctx.scale(1, 1);
+
                     ctx.clearRect(0, 0, w, h);
                     ctx.fillStyle = 'rgba(222, 222, 222, 1)';
 
                     if (!_.isEmpty($scope.words)) {
                         let line = $scope.lineHeight;
-                        ctx.font = `${line}px Impact`;
+                        ctx.font = `${line}px Intro`;
                         ctx.textAlign = 'center';
                         ctx.wrapText($scope.words, w / 2, h / 2, w - 2 * l, line);
+                        //ctx.fillText($scope.words, w / 2, h / 2, w - 2 * l);
                     } else {
                         ctx.fillRect(0, h / 2 - 2, w, 4);
                     }
@@ -100,9 +116,8 @@ angular.module('LogkAl')
                     const spacing = $scope.spacing;
                     for (var j = 0; j < b - t; j += spacing) {
                         for (var i = 0; i < r - l; i += spacing) {
-                            let p = new Particle(i, j);
-                            var idx = p.index(w, h, l, t);
-                            if (bitmap[idx] == 222) {
+                            if (bitmap[new Particle(i, j).index(w, h, l, t)] != 0) {
+                                var p = new Particle(i, j);
                                 p.randomize();
                                 f.particles.push(p);
                             }
@@ -110,6 +125,10 @@ angular.module('LogkAl')
                     }
                     ctx.clearRect(0, 0, w, h);
                     f.last = Date.now();
+                }
+
+                function initFrame0() {
+                    initFrame($scope.frame, $scope.width, $scope.height, $scope.padding, $scope.padding, $scope.width - $scope.padding, $scope.height - $scope.padding);
                 }
 
                 function calcFrame(w, h, l, t, r, b, delta) {
@@ -155,7 +174,10 @@ angular.module('LogkAl')
                 }
 
                 function renderFrame() {
-                    const fps = 1000 / 48;
+                    if (_.isUndefined(window.ctx_get)) return;
+
+                    let ctx = window.ctx_get();
+                    const fps = 1000 / 24;
                     var now = Date.now();
                     var delta = now - $scope.frame.last;
                     if (delta < fps) return;
@@ -186,69 +208,110 @@ angular.module('LogkAl')
                     $scope.frame.last = Date.now();
                 }
 
-                raf.onRenderFrame($scope, renderFrame);
-
-                function initFrame0() {
-                    initFrame($scope.frame, $scope.width, $scope.height, $scope.padding, $scope.padding, $scope.width - $scope.padding, $scope.height - $scope.padding);
-                }
-
-                bcc.on('mouseenter', function () {
-                    raf.apply(function () {
-                        $scope.frame.obstacle.on = true;
-                        $scope.frame.obstacle.dx = 0;
-                        $scope.frame.obstacle.dy = 0;
-                    });
-                });
-
-                bcc.on('mouseleave', function () {
-                    raf.apply(function () {
-                        $scope.frame.obstacle.on = false;
-                        $scope.frame.obstacle.dx = 0;
-                        $scope.frame.obstacle.dy = 0;
-                    });
-                });
-
-                bcc.on('mousemove', function (e) {
-                    raf.apply(function () {
-                        //var position = bcc.position();
-                        var offset = bcc.offset();
-                        let x = e.offsetX - $scope.padding;
-                        let y = e.offsetY - $scope.padding;
-                        let now = Date.now();
-                        var dt = now - $scope.frame.obstacle.last;
-                        if (dt > 50) {
-                            $scope.frame.obstacle.dx = x - $scope.frame.obstacle.x;
-                            $scope.frame.obstacle.dy = y - $scope.frame.obstacle.y;
-                        } else {
-                            $scope.frame.obstacle.dx += x - $scope.frame.obstacle.x;
-                            $scope.frame.obstacle.dy += y - $scope.frame.obstacle.y;
-                        }
-                        $scope.frame.obstacle.last = now;
-                        $scope.frame.obstacle.x = x;
-                        $scope.frame.obstacle.y = y;
-                    });
-                });
-
-                $scope.$watch('words', function () {
-                    raf.apply(initFrame0());
-                });
-
-                $scope.$watch('width', function () {
+                function resizeFrame() {
+                    let bcc = window.bcc();
+                    let bc = window.bc();
                     let width = `${$scope.width}px`;
                     bcc.css('max-width', width);
                     bcc.css('min-width', width);
                     bcc.css('width', width);
                     bc.prop('width', $scope.width);
-                    raf.apply(initFrame0);
-                });
-
-                $scope.$watch('height', function () {
                     let height = `${$scope.height}px`;
                     bcc.css('max-height', height);
                     bcc.css('min-height', height);
                     bcc.css('height', height);
                     bc.prop('height', $scope.height);
+
                     raf.apply(initFrame0);
+                }
+
+                window.bcc = function () {
+                    return angular.element(elem).find("#being-canvas-container");
+                };
+
+                window.bc = function () {
+                    return angular.element(elem).find("canvas");
+                };
+
+                window.ctx_get = function () {
+                    if (_.isUndefined(window.ctx_data))
+                        window.ctx_data = window.bc()[0];
+                    return window.ctx_data.getContext('2d')
+                };
+
+                $scope.frame = {
+                    obstacle: {
+                        radius: 75,
+                        x: 0, y: 0,
+                        dx: 0, dy: 0,
+                        last: Date.now()
+                    },
+                    particles: [],
+                    last: 0
+                };
+
+                $scope.$on('$destroy', function (e) {
+                    if (_.has(e.currentScope, 'frame')) {
+                        delete window.ctx_data;
+                        delete window.ctx_get;
+                    }
+                    //var old = angular.element(elem).find("canvas").replaceWith(`<canvas id="${Math.round(10000*Math.random())}"><p id="being-annotation">{{words}}</p></canvas>`);
+                    //$compile(elem)($scope);
+                    //resizeFrame();
+                });
+
+                raf.onRenderFrame($scope, renderFrame);
+
+                $scope.$watch('words', function () {
+                    raf.apply(initFrame0());
+                });
+
+                $scope.$watch('width', resizeFrame);
+
+                $scope.$watch('height', resizeFrame);
+
+                $document.ready(function (e) {
+
+                    resizeFrame();
+
+                    window.bcc().off('mouseenter mouseleave mousemove');
+
+                    window.bcc().on('mouseenter', function () {
+                        raf.apply(function () {
+                            $scope.frame.obstacle.on = true;
+                            $scope.frame.obstacle.dx = 0;
+                            $scope.frame.obstacle.dy = 0;
+                        });
+                    });
+
+                    window.bcc().on('mouseleave', function () {
+                        raf.apply(function () {
+                            $scope.frame.obstacle.on = false;
+                            $scope.frame.obstacle.dx = 0;
+                            $scope.frame.obstacle.dy = 0;
+                        });
+                    });
+
+                    window.bcc().on('mousemove', function (e) {
+                        raf.apply(function () {
+                            //var position = bcc.position();
+                            var offset = window.bcc().offset();
+                            let x = e.offsetX - $scope.padding;
+                            let y = e.offsetY - $scope.padding;
+                            let now = Date.now();
+                            var dt = now - $scope.frame.obstacle.last;
+                            if (dt > 50) {
+                                $scope.frame.obstacle.dx = x - $scope.frame.obstacle.x;
+                                $scope.frame.obstacle.dy = y - $scope.frame.obstacle.y;
+                            } else {
+                                $scope.frame.obstacle.dx += x - $scope.frame.obstacle.x;
+                                $scope.frame.obstacle.dy += y - $scope.frame.obstacle.y;
+                            }
+                            $scope.frame.obstacle.last = now;
+                            $scope.frame.obstacle.x = x;
+                            $scope.frame.obstacle.y = y;
+                        });
+                    });
                 });
             }
         }

@@ -4,7 +4,7 @@ angular.module('LogkAl')
         return {
             restrict: 'E',
             templateUrl: 'components/nav/nav.html',
-            controller: function ($scope, $mdSidenav) {
+            controller: function ($scope, $state, $mdSidenav) {
                 $scope._ = _; //усатый-полосатый
 
                 $scope.todayPhrase = null;
@@ -19,6 +19,10 @@ angular.module('LogkAl')
                         `В абсолютном свете так же ничего не видно, как в абсолютной тьме.`,
                         `Всё изменяется и остаётся неизменным.`];
                     return _.isNull($scope.todayPhrase) ? ($scope.todayPhrase = phrases[Math.min(Math.round(Math.random() * phrases.length), phrases.length - 1)]) : $scope.todayPhrase;
+                };
+
+                $scope.gotoStart = function () {
+                    $state.go('ref');
                 };
 
                 $scope.toggleNav = function (id) {
@@ -36,8 +40,8 @@ angular.module('LogkAl')
                     open: false
                 };
 
-                $scope.gotoStart = function () {
-                    $state.go('index')
+                $scope.gotoIntro = function () {
+                    $state.go('intro')
                 }
             }
         }

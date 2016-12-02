@@ -26,11 +26,11 @@
         <div flex="45"><h3 ng-click="gotoStart()" class="header">ДИАЛЕКТИЧЕСКАЯ ЛОГИКА ДЛЯ МАЛЫШЕЙ</h3></div>
         <div flex></div>
     </md-toolbar>
-    <div layout="row" layout-align="start center">
+    <div layout="row" layout-align="start center" layout-wrap>
         <md-subheader>Категории</md-subheader>
-        <md-chips>
-            <md-chip ng-repeat="step in navi.steps" ng-click="navi.gotoStep(step.id)">{{step.name}}</md-chip>
-        </md-chips>
+        <md-button ng-repeat="step in navi.steps" ng-click="navi.gotoStep(step.id)"
+                   ng-class="step.active ? 'md-raised' : ''">{{step.label}}
+        </md-button>
     </div>
 </script>
 

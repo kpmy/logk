@@ -79,7 +79,8 @@ angular.module('LogkAl')
                     p.y = y;
                     p.dx = 0;
                     p.dy = 0;
-                    p.color = [0x32, 0x5c, 0x00, 255]
+                    //p.color = [0x32, 0x5c, 0x00, 255]
+                    p.color = [0x00, 0x8f, 0x00, 255]
                 }
 
                 Particle.prototype.index = function (w, h, l, t) {
@@ -104,8 +105,10 @@ angular.module('LogkAl')
                         let line = $scope.lineHeight;
                         ctx.font = `${line}px Intro`;
                         ctx.textAlign = 'center';
-                        ctx.wrapText($scope.words, w / 2, h / 2, w - 2 * l, line);
-                        //ctx.fillText($scope.words, w / 2, h / 2, w - 2 * l);
+                        if ($scope.words.split('\n').length > 1)
+                            ctx.wrapText($scope.words, w / 2, h / 2, w - 2 * l, line);
+                        else
+                            ctx.fillText($scope.words, w / 2, h / 2, w - 2 * l);
                     } else {
                         ctx.fillRect(0, h / 2 - 2, w, 4);
                     }
@@ -177,8 +180,9 @@ angular.module('LogkAl')
                     if (_.isUndefined(window.ctx_get)) return;
 
                     let ctx = window.ctx_get();
-                    const fps = 1000 / 24;
                     var now = Date.now();
+                    let last = (now - $scope.frame.obstacle.last) / 1000;
+                    const fps = 1000 / ($scope.frame.obstacle.on ? 100 : (last < 5) ? 60 : 5);
                     var delta = now - $scope.frame.last;
                     if (delta < fps) return;
 

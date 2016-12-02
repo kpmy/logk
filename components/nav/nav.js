@@ -6,7 +6,8 @@ angular.module('LogkAl')
             templateUrl: 'components/nav/nav.html',
             controller: function ($scope, $state, $mdSidenav) {
                 $scope._ = _; //усатый-полосатый
-
+                $scope.Math = Math;
+                
                 $scope.todayPhrase = null;
 
                 $scope.phrase = function () {

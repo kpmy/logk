@@ -1,7 +1,30 @@
 <div layout="column">
     <navbar></navbar>
     <md-content layout="row" layout-align="space-around start">
-        <div flex="50"></div>
+        <div flex="50" layout="column" layout-align="start stretch">
+            <md-card ng-repeat="c in cards.list"
+                     ng-class="{'md-whiteframe-10dp': $index == cards.target, 'md-whiteframe-5dp': Math.abs($index - cards.target) < 2, 'md-whiteframe-1dp': Math.abs($index - cards.target) >= 2}"
+                     ng-init="blur = 'blur('+2*($index - cards.target)+'px)'"
+                     ng-style="{'filter': $index > cards.target ? blur : 'none'}">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline" ng-bind-html="c.label"></span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content ng-if="c.back || c.forward" marked="c.description"></md-card-content>
+                <md-card-actions layout="row" layout-align="space-between center" ng-if="c.back || c.forward">
+                    <div flex ng-if="!c.back"></div>
+                    <md-button ng-if="c.back" ng-click="navi.gotoStep(c.back.id)">
+                        <md-icon md-svg-icon="navigation:ic_arrow_back_24px"></md-icon>
+                        <span>{{c.back.label}}</span>
+                    </md-button>
+                    <md-button ng-show="c.forward" ng-click="navi.gotoStep(c.forward.id)">
+                        <span>{{c.forward.label}}</span>
+                        <md-icon md-svg-icon="navigation:ic_arrow_forward_24px"></md-icon>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
         <being flex="50" width="600" height="400" padding="30" spacing="2" words="words" line-height="100"></being>
     </md-content>
     <fabbar></fabbar>

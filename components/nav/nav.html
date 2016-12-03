@@ -29,7 +29,7 @@
     <div layout="row" layout-align="start center" layout-wrap>
         <md-subheader>Категории</md-subheader>
         <md-button ng-repeat="step in navi.steps" ng-click="navi.gotoStep(step.id)"
-                   ng-init="fab = Math.abs(navi.step.index - $index) > 3"
+                   ng-init="fab = Math.abs(navi.step.index - $index) > 2"
                    ng-class="{'md-raised md-primary': step.active, 'md-fab md-mini md-hue-3': fab}">
             <span ng-if="!fab">{{step.label}}</span>
             <span ng-if="fab">{{step.abbr}}</span>

@@ -36,6 +36,36 @@ angular.module('LogkAl')
                 id: 'being-for-itself',
                 label: 'Для-себя-бытие',
                 words: ['для-себя', 'бытие']
+            }, {
+                id: 'one',
+                label: 'Одно'
+            }, {
+                id: 'many',
+                label: 'Многие'
+            }, {
+                id: 'quantity',
+                label: 'Количество'
+            }, {
+                id: 'pure-quantity',
+                label: 'Чистое количество'
+            }, {
+                id: 'some-quantity',
+                label: 'Определённое количество'
+            }, {
+                id: 'number',
+                label: 'Число',
+                words: ['число', 'численность']
+            }, {
+                id: 'operations',
+                label: 'Операции'
+            }, {
+                id: 'grade',
+                label: 'Порядок',
+                words: ['порядок', 'степень']
+            }, {
+                id: 'quantitative',
+                label: 'Отношения',
+                words: ['количественные', 'отношения']
             }
         ];
 

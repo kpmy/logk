@@ -20,7 +20,7 @@
 <script type="text/ng-template" id="nav.ref.html">
     <md-toolbar layout="row" layout-align="start center">
         <md-button class="md-icon-button" aria-label="navi"
-                   ng-click="gotoStart()">
+                   ng-click="toggleNav('left-nav')">
             <md-icon md-svg-icon="action:ic_list_24px"></md-icon>
         </md-button>
         <div flex="45"><h3 ng-click="gotoStart()" class="header">ДИАЛЕКТИЧЕСКАЯ ЛОГИКА ДЛЯ МАЛЫШЕЙ</h3></div>
@@ -29,9 +29,36 @@
     <div layout="row" layout-align="start center" layout-wrap>
         <md-subheader>Категории</md-subheader>
         <md-button ng-repeat="step in navi.steps" ng-click="navi.gotoStep(step.id)"
-                   ng-class="step.active ? 'md-raised' : ''">{{step.label}}
+                   ng-init="fab = Math.abs(navi.step.index - $index) > 3"
+                   ng-class="{'md-raised md-primary': step.active, 'md-fab md-mini md-hue-3': fab}">
+            <span ng-if="!fab">{{step.label}}</span>
+            <span ng-if="fab">{{step.abbr}}</span>
+            <md-tooltip ng-if="fab">{{step.label}}</md-tooltip>
         </md-button>
     </div>
+    <md-sidenav class="md-sidenav-left" md-component-id="left-nav">
+        <md-toolbar layout="row" layout-align="start center">
+            <md-button class="md-icon-button" aria-label="navi" ng-click="toggleNav('left-nav')">
+                <md-icon md-svg-icon="hardware:ic_keyboard_arrow_left_24px"></md-icon>
+            </md-button>
+            <div><h3>КАТЕГОРИИ</h3></div>
+        </md-toolbar>
+        <md-content>
+            <md-list>
+                <section ng-repeat="(i, step) in navi.steps">
+                    <md-list-item ng-click="navi.gotoStep(step.id) + toggleNav('left-nav')">
+                        <div layout="row" class="md-list-item-text">
+                            <md-icon md-svg-icon="action:ic_timeline_24px" style="padding-right: 0.3em"></md-icon>
+                            <md-icon class="md-secondary" md-svg-icon="image:ic_remove_red_eye_24px"
+                                     style="padding-right: 0.3em" ng-if="_.isEqual(navi.step.index, i)"></md-icon>
+                            <p>{{step.label}}</p>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                </section>
+            </md-list>
+        </md-content>
+    </md-sidenav>
 </script>
 
 <section ng-if="!_.isObject(navi)" ng-include="'nav.index.html'"></section>

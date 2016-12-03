@@ -7,28 +7,43 @@ angular.module('LogkAl')
         steps = [
             {
                 id: 'pure-being',
-                label: 'Чистое бытие',
-                words: ['чистое', 'бытие']
+                label: 'Чистое бытие'
             }, {
                 id: 'nothing',
-                label: 'Ничто',
-                words: ['ничто']
+                label: 'Ничто'
             }, {
                 id: 'becoming',
-                label: 'Становление',
-                words: ['становление']
+                label: 'Становление'
             }, {
-                id: 'passing',
-                label: 'Прехождение',
-                words: ['прехождение']
+                id: 'moments',
+                label: 'Моменты',
+                words: ['возникновение', 'прехождение']
             }, {
-                id: 'uprising',
-                label: 'Возникновение',
-                words: ['возникновение']
+                id: 'being',
+                label: 'Наличное бытие'
+            }, {
+                id: 'something',
+                label: 'Нечто',
+                words: ['нечто', 'иное']
+            }, {
+                id: 'otherness',
+                label: 'Инобытие'
+            }, {
+                id: 'quality',
+                label: 'Качество',
+                words: ['качество', 'предел']
+            }, {
+                id: 'being-for-itself',
+                label: 'Для-себя-бытие',
+                words: ['для-себя', 'бытие']
             }
         ];
 
         steps.forEach(x => {
+            if (_.isEmpty(x.words)) {
+                x.words = x.label.split(' ').map(w => w.toLowerCase());
+            }
+
             $http.get('components/steps/' + x.id + '.md').then(res => {
                 x.description = res.data;
                 $rootScope.$broadcast('steps');

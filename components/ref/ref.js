@@ -4,7 +4,7 @@ angular.module('LogkAl')
 
         $scope.navi = {
             step: {
-                id: !_.isEmpty($stateParams.id) ? $stateParams.id : _.first(Steps.list()).id
+                id: !_.isEmpty($stateParams.id) ? $stateParams.id : _.first(Steps.list()).id,
             },
             steps: [],
             gotoStep: function (id) {
@@ -12,11 +12,13 @@ angular.module('LogkAl')
             }
         };
 
-        Steps.list().forEach(step => {
+        Steps.list().forEach((step, i) => {
             $scope.navi.steps.push({
                 label: step.label,
+                abbr: step.words.map(w => w.charAt(0).toUpperCase()).join(''),
                 active: $scope.navi.step.id == step.id,
-                id: step.id
+                id: step.id,
+                index: i
             });
         });
         
@@ -29,7 +31,7 @@ angular.module('LogkAl')
             $scope.words = Steps.get($scope.navi.step.id).words.join('\n');
 
             let steps = Steps.list();
-            let idx = Steps.indexOf($scope.navi.step.id);
+            let idx = $scope.navi.step.index = Steps.indexOf($scope.navi.step.id);
             let range = 2;
             let start = Math.max(0, idx - range);
             let end = Math.min(steps.length, idx + (2 * range + 1) - (idx - start));

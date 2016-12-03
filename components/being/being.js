@@ -49,7 +49,7 @@ angular.module('LogkAl')
                     }
                 }
 
-                this.fillText(line, x, y);
+                this.fillText(line, x, y, maxWidth);
                 y += lineHeight;
             }
         };
@@ -245,7 +245,7 @@ angular.module('LogkAl')
 
                 $scope.frame = {
                     obstacle: {
-                        radius: 75,
+                        radius: 45,
                         x: 0, y: 0,
                         dx: 0, dy: 0,
                         last: Date.now()

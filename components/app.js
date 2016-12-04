@@ -28,4 +28,7 @@ angular.module('LogkAl', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ngMessages', 
     })
     .config(function (markedProvider) {
             markedProvider.setOptions({gfm: true});
+    }).config(function ($mdAriaProvider) {
+    // Globally disables all ARIA warnings.
+    $mdAriaProvider.disableWarnings();
     });

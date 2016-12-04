@@ -4,70 +4,121 @@
 angular.module('LogkAl')
     .service('Steps', function ($http, $rootScope) {
         const ss = this;
-        steps = [
-            {
-                id: 'pure-being',
-                label: 'Чистое бытие'
-            }, {
-                id: 'nothing',
-                label: 'Ничто'
-            }, {
-                id: 'becoming',
-                label: 'Становление'
-            }, {
-                id: 'moments',
-                label: 'Моменты',
-                words: ['возникновение', 'прехождение']
-            }, {
-                id: 'being',
-                label: 'Наличное бытие'
-            }, {
-                id: 'something',
-                label: 'Нечто',
-                words: ['нечто', 'иное']
-            }, {
-                id: 'otherness',
-                label: 'Инобытие'
-            }, {
-                id: 'quality',
-                label: 'Качество',
-                words: ['качество', 'предел']
-            }, {
-                id: 'being-for-itself',
-                label: 'Для-себя-бытие',
-                words: ['для-себя', 'бытие']
-            }, {
-                id: 'one',
-                label: 'Одно'
-            }, {
-                id: 'many',
-                label: 'Многие'
-            }, {
-                id: 'quantity',
-                label: 'Количество'
-            }, {
-                id: 'pure-quantity',
-                label: 'Чистое количество'
-            }, {
-                id: 'some-quantity',
-                label: 'Определённое количество'
-            }, {
-                id: 'number',
-                label: 'Число',
-                words: ['число', 'численность']
-            }, {
-                id: 'operations',
-                label: 'Операции'
-            }, {
-                id: 'grade',
-                label: 'Порядок',
-                words: ['порядок', 'степень']
-            }, {
-                id: 'quantitative',
-                label: 'Отношения',
-                words: ['количественные', 'отношения']
-            }
-        ];
+        const being = {
+            label: 'Учение о бытии',
+            values: [
+                {
+                    id: 'pure-being',
+                    label: 'Чистое бытие'
+                }, {
+                    id: 'nothing',
+                    label: 'Ничто'
+                }, {
+                    id: 'becoming',
+                    label: 'Становление'
+                }, {
+                    id: 'moments',
+                    label: 'Моменты',
+                    words: ['возникновение', 'прехождение']
+                }, {
+                    id: 'being',
+                    label: 'Наличное бытие'
+                }, {
+                    id: 'something',
+                    label: 'Нечто',
+                    words: ['нечто', 'иное']
+                }, {
+                    id: 'otherness',
+                    label: 'Инобытие'
+                }, {
+                    id: 'quality',
+                    label: 'Качество',
+                    words: ['качество', 'предел']
+                }, {
+                    id: 'being-for-itself',
+                    label: 'Для-себя-бытие',
+                    words: ['для-себя', 'бытие']
+                }, {
+                    id: 'one',
+                    label: 'Одно'
+                }, {
+                    id: 'many',
+                    label: 'Многие'
+                }, {
+                    id: 'quantity',
+                    label: 'Количество'
+                }, {
+                    id: 'pure-quantity',
+                    label: 'Чистое количество'
+                }, {
+                    id: 'some-quantity',
+                    label: 'Определённое количество'
+                }, {
+                    id: 'number',
+                    label: 'Число',
+                    words: ['число', 'численность']
+                }, {
+                    id: 'operations',
+                    label: 'Операции'
+                }, {
+                    id: 'grade',
+                    label: 'Порядок',
+                    words: ['порядок', 'степень']
+                }, {
+                    id: 'quantitative',
+                    label: 'Отношения',
+                    words: ['количественные', 'отношения']
+                }, {
+                    id: 'specific-quantity',
+                    label: 'Специфицированное количество',
+                    words: ['специфика', 'количества']
+                }, {
+                    id: 'specific-measure',
+                    label: 'Специфическая мера',
+                    words: ['специфическая', 'мера']
+                }, {
+                    id: 'specific-self-measures',
+                    label: 'Специфически самостоятельные меры',
+                    words: ['самостоятельные', 'меры']
+                }, {
+                    id: 'nodal-line-of-measures',
+                    label: 'Узловая линия мер',
+                    words: ['узловая', 'линия мер']
+                }, {
+                    id: 'real-measure',
+                    label: 'Реальная мера'
+                }
+            ]
+        };
+
+        const entity = {
+            label: 'Учение о сущности',
+            values: [{
+                id: 'bla',
+                label: 'Bla bla'
+            }]
+        };
+
+        const concept = {
+            label: 'Учение о понятии',
+            values: [{
+                id: 'bla-bla',
+                label: 'Blabla bla'
+            }]
+        };
+
+        const cat = this.cats = {
+            being,
+            entity,
+            concept
+        };
+
+        const steps = _.map(_.keys(cat), (k) => {
+            return _.map(cat[k].values, (s => {
+                s.cat = k;
+                return s;
+            }))
+        }).concat().reduce((a, b) => a.concat(b));
 
         steps.forEach(x => {
             if (_.isEmpty(x.words)) {

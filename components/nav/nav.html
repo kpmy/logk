@@ -24,8 +24,22 @@
             <md-icon md-svg-icon="action:ic_list_24px"></md-icon>
         </md-button>
         <div flex="45"><h3 ng-click="gotoStart()" class="header">ДИАЛЕКТИЧЕСКАЯ ЛОГИКА ДЛЯ МАЛЫШЕЙ</h3></div>
+        <div flex="20"><h3>{{navi.step.label.toUpperCase()}}</h3></div>
         <div flex></div>
+        <md-button aria-label="Back" ng-click="navi.showPrevStep()" ng-if="navi.hasPrevStep()">
+            <md-icon md-svg-icon="navigation:ic_arrow_back_24px"></md-icon>
+            <span ng-if="!hasNextStep()">НАЗАД</span>
+            <md-tooltip>{{navi.steps[navi.step.index - 1].label}}</md-tooltip>
+        </md-button>
+        <md-button aria-label="Fwd" ng-click="navi.showNextStep()" ng-if="navi.hasNextStep()">
+            ДАЛЬШЕ
+            <md-icon md-svg-icon="navigation:ic_arrow_forward_24px"></md-icon>
+            <md-tooltip>{{navi.steps[navi.step.index + 1].label}}</md-tooltip>
+        </md-button>
     </md-toolbar>
+    <md-tabs md-selected="navi.tab" md-dynamic-height md-border-bottom md-autoselect>
+        <md-tab ng-repeat="cat in navi.cats" ng-click="navi.gotoCat(cat.id)" label="{{cat.label}}"></md-tab>
+    </md-tabs>
     <div layout="row" layout-align="start center" layout-wrap>
         <md-subheader>Категории</md-subheader>
         <md-button ng-repeat="step in navi.steps" ng-click="navi.gotoStep(step.id)"

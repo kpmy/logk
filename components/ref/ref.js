@@ -7,8 +7,39 @@ angular.module('LogkAl')
                 id: !_.isEmpty($stateParams.id) ? $stateParams.id : _.first(Steps.list()).id,
             },
             steps: [],
+            tab: 0,
+            cats: ['being', 'entity', 'concept'].map(c => {
+                var cat = Steps.cats[c];
+                return {
+                    id: c,
+                    label: cat.label
+                }
+            }),
+            gotoCat: function (id) {
+                let step = _.find(Steps.list(), s => _.isEqual(s.cat, id));
+                this.gotoStep(step.id);
+            },
+            initStep: function () {
+                let steps = Steps.list();
+                this.step.index = Steps.indexOf(this.step.id);
+                this.step.label = steps[this.step.index].label;
+                this.step.cat = steps[this.step.index].cat;
+                this.tab = _.findIndex(this.cats, c => _.isEqual(this.step.cat, c.id))
+            },
             gotoStep: function (id) {
                 $state.go('ref', {id: id});
+            },
+            showPrevStep: function () {
+                this.gotoStep(this.steps[this.step.index - 1].id)
+            },
+            hasPrevStep: function () {
+                return this.step.index > 0;
+            },
+            showNextStep: function () {
+                this.gotoStep(this.steps[this.step.index + 1].id)
+            },
+            hasNextStep: function () {
+                return this.step.index + 1 < this.steps.length;
             }
         };
 
@@ -23,15 +54,17 @@ angular.module('LogkAl')
         });
         
         let showCurrentStep = function () {
+
+            $scope.navi.initStep();
+
             $scope.cards = {
                 list: [],
                 target: 0
             };
 
             $scope.words = Steps.get($scope.navi.step.id).words.join('\n');
-
             let steps = Steps.list();
-            let idx = $scope.navi.step.index = Steps.indexOf($scope.navi.step.id);
+            let idx = Steps.indexOf($scope.navi.step.id);
             let range = 2;
             let start = Math.max(0, idx - range);
             let end = Math.min(steps.length, idx + (2 * range + 1) - (idx - start));

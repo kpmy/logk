@@ -36,17 +36,7 @@ angular.module('LogkAl')
                 var line = '';
 
                 for (var n = 0; n < words.length; n++) {
-                    var testLine = line + words[n] + ' ';
-                    var metrics = this.measureText(testLine);
-                    var testWidth = metrics.width;
-                    if (testWidth > maxWidth && n > 0) {
-                        this.fillText(line, x, y);
-                        line = words[n] + ' ';
-                        y += lineHeight;
-                    }
-                    else {
-                        line = testLine;
-                    }
+                    line = line + words[n] + ' ';
                 }
 
                 this.fillText(line, x, y, maxWidth);

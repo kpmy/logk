@@ -2,7 +2,7 @@
  * Created by petry_000 on 28.11.2016.
  */
 angular.module('LogkAl')
-    .service('Steps', function ($http, $rootScope) {
+    .service('Steps', function ($http, $q, $rootScope) {
         const ss = this;
         const being = {
             label: 'Учение о бытии',
@@ -93,17 +93,92 @@ angular.module('LogkAl')
 
         const entity = {
             label: 'Учение о сущности',
-            values: [{
-                id: 'bla',
-                label: 'Bla bla'
-            }]
+            values: [
+                {
+                    id: 'difference',
+                    label: 'Разность',
+                    words: ['сходство', 'несходство']
+                }, {
+                    id: 'opposite',
+                    label: 'Противоположность',
+                    words: ['противо', 'положность']
+                }, {
+                    id: 'common',
+                    label: 'Основание'
+                }, {
+                    id: 'entity',
+                    label: 'Сущность'
+                }, {
+                    id: 'existenz',
+                    label: 'Существование'
+                }, {
+                    id: 'thing',
+                    label: 'Вещь'
+                }, {
+                    id: 'property',
+                    label: 'Свойство'
+                }, {
+                    id: 'matter',
+                    label: 'Материя'
+                }, {
+                    id: 'form',
+                    label: 'Форма'
+                }, {
+                    id: 'phenomenon',
+                    label: 'Явление'
+                }, {
+                    id: 'content',
+                    label: 'Содержание'
+                }, {
+                    id: 'whole',
+                    label: 'Целое и части',
+                    words: ['часть', 'целое']
+                }, {
+                    id: 'force',
+                    label: 'Сила'
+                }, {
+                    id: 'inner-outer',
+                    label: 'Внешнее и внутреннее',
+                    words: ['внешнее', 'внутреннее']
+                }, {
+                    id: 'actuality',
+                    label: 'Действительность'
+                }, {
+                    id: 'ability',
+                    label: 'Возможность'
+                }, {
+                    id: 'eventuality',
+                    label: 'Случайность'
+                }, {
+                    id: 'condition',
+                    label: 'Условия'
+                }, {
+                    id: 'subj',
+                    label: 'Предмет'
+                }, {
+                    id: 'activity',
+                    label: 'Деятельность'
+                }, {
+                    id: 'necessity',
+                    label: 'Необходимость'
+                }, {
+                    id: 'substance',
+                    label: 'Субстанция'
+                }, {
+                    id: 'reason',
+                    label: 'Причина'
+                }, {
+                    id: 'interaction',
+                    label: 'Взаимодействие'
+                }
+            ]
         };
 
         const concept = {
             label: 'Учение о понятии',
             values: [{
-                id: 'bla-bla',
-                label: 'Blabla bla'
+                id: 'end',
+                label: 'Продолжение следует'
             }]
         };
 
@@ -125,10 +200,13 @@ angular.module('LogkAl')
                 x.words = x.label.split(' ').map(w => w.toLowerCase());
             }
 
-            $http.get('components/steps/' + x.id + '.md').then(res => {
+            var pl = [];
+            pl.push($http.get('components/steps/' + x.id + '.md').then(res => {
                 x.description = res.data;
+            }));
+            $q.all(pl).then(function () {
                 $rootScope.$broadcast('steps');
-            });
+            })
         });
 
         ss.list = function () {

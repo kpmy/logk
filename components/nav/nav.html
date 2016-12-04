@@ -44,7 +44,8 @@
         <md-subheader>Категории</md-subheader>
         <md-button ng-repeat="step in navi.steps" ng-click="navi.gotoStep(step.id)"
                    ng-init="fab = Math.abs(navi.step.index - $index) > 2"
-                   ng-class="{'md-raised md-primary': step.active, 'md-fab md-mini md-hue-3': fab}">
+                   ng-class="{'md-raised md-primary': step.active, 'md-fab md-mini md-hue-3': fab}"
+                   ng-if="_.isEqual(step.cat, navi.step.cat)">
             <span ng-if="!fab">{{step.label}}</span>
             <span ng-if="fab">{{step.abbr}}</span>
             <md-tooltip ng-if="fab">{{step.label}}</md-tooltip>

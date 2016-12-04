@@ -48,6 +48,7 @@ angular.module('LogkAl')
                 label: step.label,
                 abbr: step.words.map(w => w.charAt(0).toUpperCase()).join(''),
                 active: $scope.navi.step.id == step.id,
+                cat: step.cat,
                 id: step.id,
                 index: i
             });

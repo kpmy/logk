@@ -176,10 +176,70 @@ angular.module('LogkAl')
 
         const concept = {
             label: 'Учение о понятии',
-            values: [{
-                id: 'end',
-                label: 'Продолжение следует'
-            }]
+            values: [
+                {
+                    id: 'def',
+                    label: 'Всеобщее - Особенное - Единичное',
+                    words: ['В-О-Е']
+                }, {
+                    id: 'assertion',
+                    label: 'Суждение'
+                }, {
+                    id: 'subject',
+                    label: 'Субъект'
+                }, {
+                    id: 'steps',
+                    label: 'Ступени суждений'
+                }, {
+                    id: 'assert-being',
+                    label: 'Суждения бытия'
+                }, {
+                    id: 'assert-reflection',
+                    label: 'Суждения рефлексии'
+                }, {
+                    id: 'assert-necessity',
+                    label: 'Суждения необходимости'
+                }, {
+                    id: 'assert-subject',
+                    label: 'Суждения понятия'
+                }, {
+                    id: 'conclusion',
+                    label: 'Умозаключения'
+                }, {
+                    id: 'conclusion-being',
+                    label: 'Умозаключения бытия'
+                }, {
+                    id: 'conclusion-reflection',
+                    label: 'Умозаключения рефлексии'
+                }, {
+                    id: 'conclusion-necessity',
+                    label: 'Умозаключения необходимости'
+                }, {
+                    id: 'object',
+                    label: 'Объект'
+                }, {
+                    id: 'mechanical-object',
+                    label: 'Механический объект'
+                }, {
+                    id: 'chemical-object',
+                    label: 'Химический объект'
+                }, {
+                    id: 'teleological-object',
+                    label: 'Телеологический объект'
+                }, {
+                    id: 'idea',
+                    label: 'Идея'
+                }, {
+                    id: 'idea-life',
+                    label: 'Идея жизни'
+                }, {
+                    id: 'idea-cognition',
+                    label: 'Идея познания'
+                }, {
+                    id: 'idea-absolution',
+                    label: 'Абсолютная идея'
+                }
+            ]
         };
 
         const cat = this.cats = {

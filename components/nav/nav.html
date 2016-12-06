@@ -9,7 +9,7 @@
                    ng-click="gotoStart()">
             <md-icon md-svg-icon="action:ic_list_24px"></md-icon>
         </md-button>
-        <div flex="45"><h3 ng-click="gotoStart()" class="header">ДИАЛЕКТИЧЕСКАЯ ЛОГИКА ДЛЯ МАЛЫШЕЙ</h3></div>
+        <div flex="40"><h3 ng-click="gotoStart()" class="header">НАУКА ЛОГИКИ ДЛЯ МАЛЫШЕЙ</h3></div>
         <div flex></div>
     </md-toolbar>
     <div layout="row" layout-align="end center">
@@ -23,8 +23,8 @@
                    ng-click="toggleNav('left-nav')">
             <md-icon md-svg-icon="action:ic_list_24px"></md-icon>
         </md-button>
-        <div flex="45"><h3 ng-click="gotoStart()" class="header">ДИАЛЕКТИЧЕСКАЯ ЛОГИКА ДЛЯ МАЛЫШЕЙ</h3></div>
-        <div flex="20"><h3>{{navi.step.label.toUpperCase()}}</h3></div>
+        <div flex="40"><h3 ng-click="gotoStart()" class="header">НАУКА ЛОГИКИ ДЛЯ МАЛЫШЕЙ</h3></div>
+        <div flex="30"><h3>{{navi.step.label.toUpperCase()}}</h3></div>
         <div flex></div>
         <md-button aria-label="Back" ng-click="navi.showPrevStep()" ng-if="navi.hasPrevStep()">
             <md-icon md-svg-icon="navigation:ic_arrow_back_24px"></md-icon>
@@ -67,6 +67,13 @@
                             <md-icon class="md-secondary" md-svg-icon="image:ic_remove_red_eye_24px"
                                      style="padding-right: 0.3em" ng-if="_.isEqual(navi.step.index, i)"></md-icon>
                             <p>{{step.label}}</p>
+                        </div>
+                    </md-list-item>
+                    <md-list-item ng-repeat="sub in step.subs" ng-if="!_.isEmpty(step.subs)"
+                                  ng-click="navi.gotoStep(step.id) + toggleNav('left-nav')">
+                        <div layout="row" class="md-list-item-text" style="margin-left: 1em;">
+                            <md-icon md-svg-icon="editor:ic_show_chart_24px" style="padding-right: 0.3em"></md-icon>
+                            <p>{{sub}}</p>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>

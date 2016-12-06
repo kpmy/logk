@@ -1,7 +1,7 @@
 <div layout="column">
     <navbar></navbar>
-    <md-content layout="row" layout-align="space-around start">
-        <div flex="50" layout="column" layout-align="start stretch">
+    <md-content layout="row" layout-align="space-around center" layout-wrap>
+        <div flex layout="column" layout-align="start stretch">
             <md-card ng-repeat="c in cards.list"
                      ng-class="{'md-whiteframe-10dp': $index == cards.target, 'md-whiteframe-5dp': Math.abs($index - cards.target) < 2, 'md-whiteframe-1dp': Math.abs($index - cards.target) >= 2}"
                      ng-init="blur = 'blur('+2*($index - cards.target)+'px)'"
@@ -25,7 +25,7 @@
                 </md-card-actions>
             </md-card>
         </div>
-        <being flex="50" width="600" height="400" padding="30" spacing="2" words="words" line-height="120"></being>
+        <being flex width="600" height="400" padding="30" spacing="2" words="words" line-height="120" hide-xs></being>
     </md-content>
     <fabbar></fabbar>
 </div>

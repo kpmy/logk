@@ -50,6 +50,7 @@ angular.module('LogkAl')
                 active: $scope.navi.step.id == step.id,
                 cat: step.cat,
                 id: step.id,
+                subs: step.subs,
                 index: i
             });
         });
